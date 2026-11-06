@@ -1,0 +1,15 @@
+{
+  "name": "authorized-vulnerability-assessment-platform",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Authenticated, allowlist-enforced TCP exposure assessment platform",
+  "engines": { "node": ">=22.13.0" },
+  "scripts": {
+    "start": "node --env-file=.env server.js",
+    "test": "node --test",
+    "check": "node --check server.js && node --check src/security.js && node --check src/scanner.js"
+  },
+  "dependencies": {
+    "ws": "^8.18.3"
+  }
+}

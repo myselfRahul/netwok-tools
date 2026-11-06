@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="color-scheme" content="light">
+  <title>Sentinel — Vulnerability Assessment</title>
+  <link rel="stylesheet" href="/styles.css">
+  <script defer src="/app.js"></script>
+</head>
+<body>
+  <div class="login-shell" id="loginView">
+    <form class="login-card" id="loginForm">
+      <div class="brand-mark">S</div>
+      <p class="eyebrow">SECURITY OPERATIONS</p>
+      <h1>Sign in to Sentinel</h1>
+      <p class="muted">Authorized asset exposure assessment</p>
+      <label>Username<input id="username" autocomplete="username" required maxlength="64"></label>
+      <label>Password<input id="password" type="password" autocomplete="current-password" required maxlength="256"></label>
+      <button class="primary full" type="submit">Sign in</button>
+      <p class="error" id="loginError" role="alert"></p>
+    </form>
+  </div>
+
+  <div id="appView" hidden>
+    <aside class="sidebar">
+      <div class="brand"><span class="brand-mark small">S</span><span>Sentinel</span></div>
+      <div class="nav-label">WORKSPACE</div>
+      <a class="nav-item active" href="#overview">▦ <span>Overview</span></a>
+      <a class="nav-item" href="#scanner">⌕ <span>New assessment</span></a>
+      <a class="nav-item" href="#history">◷ <span>Scan history</span></a>
+      <div class="sidebar-bottom">
+        <span class="online-dot"></span><span>Assessment engine ready</span>
+      </div>
+    </aside>
+
+    <main class="main">
+      <header class="topbar">
+        <div><p class="eyebrow">SECURITY / OVERVIEW</p><h1>Vulnerability assessment</h1></div>
+        <div class="user-area"><span id="userLabel"></span><button class="button secondary" id="logoutBtn">Sign out</button></div>
+      </header>
+
+      <section class="notice"><strong>Authorized scope only</strong><span>Targets must fall within the IPv4 ranges configured in AUTHORIZED_CIDRS on the server.</span></section>
+
+      <section class="metrics" id="overview">
+        <article class="metric"><span class="metric-label">ASSESSMENTS</span><strong id="metricJobs">0</strong><small>Recorded jobs</small></article>
+        <article class="metric"><span class="metric-label">ASSETS CHECKED</span><strong id="metricAssets">0</strong><small>Across loaded history</small></article>
+        <article class="metric"><span class="metric-label">OPEN SERVICES</span><strong id="metricPorts">0</strong><small>Latest assessment results</small></article>
+        <article class="metric"><span class="metric-label">ACTIVE JOBS</span><strong id="metricActive">0</strong><small>Current process</small></article>
+      </section>
+
+      <section class="panel" id="scanner">
+        <div class="panel-heading"><div><p class="eyebrow">ASSESSMENT CONFIGURATION</p><h2>Start a new assessment</h2></div><span class="pill">TCP discovery</span></div>
+        <div class="form-grid">
+          <label class="wide">Authorized IPv4 target or CIDR
+            <input id="targetInput" placeholder="Example: 192.168.1.25 or 192.168.1.0/24" maxlength="128">
+            <small>Hostnames, URLs and IPv6 are intentionally not accepted.</small>
+          </label>
+          <label>TCP ports (comma separated)
+            <input id="portInput" value="22,80,443,445,3389,8080,8443" inputmode="numeric">
+          </label>
+          <label>Concurrency
+            <select id="concurrency"><option>1</option><option>2</option><option selected>4</option><option>6</option><option>8</option></select>
+          </label>
+        </div>
+        <div class="actions">
+          <button class="primary" id="startBtn">Start assessment</button>
+          <button class="secondary" id="pauseBtn" disabled>Pause</button>
+          <button class="secondary" id="resumeBtn" disabled>Resume</button>
+          <button class="danger-outline" id="cancelBtn" disabled>Cancel</button>
+          <span class="status" id="scanStatus">Idle</span>
+        </div>
+        <div class="progress-track"><div id="progressBar"></div></div>
+        <p class="muted compact" id="progressText">No active assessment</p>
+      </section>
+
+      <section class="panel">
+        <div class="panel-heading"><div><p class="eyebrow">LIVE TELEMETRY</p><h2>Asset results</h2></div><span class="muted" id="connectionState">Connecting…</span></div>
+        <div class="table-wrap">
+          <table><thead><tr><th>IP ADDRESS</th><th>STATE</th><th>OPEN PORTS</th><th>ASSESSMENT INDICATORS</th></tr></thead><tbody id="resultsBody"><tr><td colspan="4" class="empty">Start an assessment to view results.</td></tr></tbody></table>
+        </div>
+      </section>
+
+      <section class="panel" id="history">
+        <div class="panel-heading"><div><p class="eyebrow">AUDIT TRAIL</p><h2>Recent assessments</h2></div><button class="secondary" id="refreshHistory">Refresh</button></div>
+        <div class="table-wrap">
+          <table><thead><tr><th>JOB ID</th><th>TARGET</th><th>STATUS</th><th>PROGRESS</th><th>CREATED</th><th>REPORT</th></tr></thead><tbody id="historyBody"><tr><td colspan="6" class="empty">No assessment history.</td></tr></tbody></table>
+        </div>
+      </section>
+      <footer>Sentinel Assessment Platform · TCP exposure indicators are not proof of exploitability or confirmed CVEs.</footer>
+    </main>
+  </div>
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+</body>
+</html>
